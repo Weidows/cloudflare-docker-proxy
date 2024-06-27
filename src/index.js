@@ -1,3 +1,5 @@
+import DOCS from './index.html'
+
 addEventListener("fetch", (event) => {
   event.passThroughOnException();
   event.respondWith(handleRequest(event.request));
@@ -7,17 +9,17 @@ const dockerHub = "https://registry-1.docker.io";
 
 const routes = {
   // production
-  "docker.libcuda.so": dockerHub,
-  "quay.libcuda.so": "https://quay.io",
-  "gcr.libcuda.so": "https://gcr.io",
-  "k8s-gcr.libcuda.so": "https://k8s.gcr.io",
-  "k8s.libcuda.so": "https://registry.k8s.io",
-  "ghcr.libcuda.so": "https://ghcr.io",
-  "cloudsmith.libcuda.so": "https://docker.cloudsmith.io",
-  "ecr.libcuda.so": "https://public.ecr.aws",
+  "docker.hub.weidows.tech": dockerHub,
+  "quay.hub.weidows.tech": "https://quay.io",
+  "gcr.hub.weidows.tech": "https://gcr.io",
+  "k8s-gcr.hub.weidows.tech": "https://k8s.gcr.io",
+  "k8s.hub.weidows.tech": "https://registry.k8s.io",
+  "ghcr.hub.weidows.tech": "https://ghcr.io",
+  "cloudsmith.hub.weidows.tech": "https://docker.cloudsmith.io",
+  "ecr.hub.weidows.tech": "https://public.ecr.aws",
 
   // staging
-  "docker-staging.libcuda.so": dockerHub,
+  "docker-staging.hub.weidows.tech": dockerHub,
 };
 
 function routeByHosts(host) {
@@ -42,6 +44,15 @@ async function handleRequest(request) {
         status: 404,
       }
     );
+  }
+  // return tips.html
+  if (url.pathname === "/") {
+    return new Response(DOCS, {
+      status: 200,
+      headers: {
+        "content-type": "text/html"
+      }
+    });
   }
   const isDockerHub = upstream == dockerHub;
   const authorization = request.headers.get("Authorization");
